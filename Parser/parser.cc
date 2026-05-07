@@ -4,17 +4,18 @@ bool parser::parse(const std::string& raw_cmd, std::chrono::steady_clock::time_p
     size_t idx = raw_cmd.find(';');
     if(idx == std::string::npos) return false;
     size_t cmd_idx = 0;
+    // print Hello World!; sleep 1000; 
     while(idx != std::string::npos){
         size_t space = raw_cmd.find(' ', cmd_idx);
 
-        if(space == std::string::npos) continue;
+        if(space == std::string::npos) return false;
 
         std::string cmd = raw_cmd.substr(cmd_idx, space-cmd_idx);
 
         command* cmd_used = nullptr;
 
         size_t next_end = raw_cmd.find(';', space+1);
-        if(next_end == std::string::npos) continue;
+        if(next_end == std::string::npos) return false;
         std::string cmd_str = raw_cmd.substr(space+1, next_end-space-1);
 
         if(cmd == "print"){

@@ -16,7 +16,7 @@ inline void out(Args&&... args){
 }
 
 struct command {
-    // Parent class
+    // Parent struct
     std::chrono::steady_clock::time_point start; // Timestamp for when the rtos has ran. Populated via ctor
     command(std::chrono::steady_clock::time_point& start_time);
     virtual int8_t execute() = 0;
