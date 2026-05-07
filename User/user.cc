@@ -11,9 +11,8 @@ int main(){
         return "[RTOS Terminal] ";
     };
 
-    out("Launched RTOS.");
-
     while(cmd != "exit"){
+        out("");
         std::cin >> cmd;
 
         if(cmd == "schedule"){
@@ -34,8 +33,6 @@ int main(){
                 },
                 priority
             });
-
-            out("Successfully scheduled a new job with priority [", prio_input, "].");
         }
     }
 
