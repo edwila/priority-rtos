@@ -1,6 +1,6 @@
 #include "parser.hpp"
 
-bool parser::parse(const std::string& raw_cmd, std::chrono::steady_clock::time_point& start_time){
+bool parser::parse(const std::string& raw_cmd, std::chrono::steady_clock::time_point& start_time, task* t, rtos* os){
     size_t idx = raw_cmd.find(';');
     if(idx == std::string::npos) return false;
     size_t cmd_idx = 0;
@@ -19,9 +19,19 @@ bool parser::parse(const std::string& raw_cmd, std::chrono::steady_clock::time_p
         std::string cmd_str = raw_cmd.substr(space+1, next_end-space-1);
 
         if(cmd == "print"){
-            cmd_used = new print(start_time, cmd_str);
+            cmd_used = new print(start_time, cmd_str, t, os);
         } else if(cmd == "sleep"){
-            cmd_used = new sleep_cmd(start_time, static_cast<uint32_t>(std::stoi(cmd_str)));
+            cmd_used = new sleep_cmd(start_time, static_cast<uint32_t>(std::stoi(cmd_str)), t, os);
+        } else if(cmd == "add"){
+            size_t sp = cmd_str.find(' ');
+            std::string a = cmd_str.substr(0, sp);
+            std::string b = cmd_str.substr(sp, cmd_str.length());
+            cmd_used = new add_cmd(start_time, static_cast<uint32_t>(std::stoi(a)), static_cast<uint32_t>(std::stoi(b)), t, os);
+        } else if(cmd == "add_sleep"){
+            size_t sp = cmd_str.find(' ');
+            std::string a = cmd_str.substr(0, sp);
+            std::string b = cmd_str.substr(sp, cmd_str.length());
+            cmd_used = new add_sleep_cmd(start_time, static_cast<uint32_t>(std::stoi(a)), static_cast<uint32_t>(std::stoi(b)), t, os);
         }
 
         if(cmd_used != nullptr){

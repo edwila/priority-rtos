@@ -25,14 +25,17 @@ int main(){
             auto par = std::make_shared<parser>();
             auto tm = os.get_time();
 
-            par->parse(cmd, tm);
-
-            os.schedule(task{
-                [cmd, par, tm]() -> bool {
+            task* t = new task{
+                [par]() -> bool {
                     return par->step();
                 },
-                priority
-            });
+                priority,
+                nullptr
+            };
+
+            par->parse(cmd, tm, t, &os);
+
+            os.schedule(t);
         }
     }
 
